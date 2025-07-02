@@ -14,7 +14,6 @@ import openai
 
 # ────────────────────────── CONFIG ──────────────────────────
 openai.api_key="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"  # optional for sk-proj keys
-client = openai
 ASSISTANT_ID = "asst_xzJKnd6qxS7lrV2PKDXmAWz9"  # replace if needed
 
 DOCX_PATH = "Structured Content for ChatBot.docx"
@@ -61,24 +60,24 @@ executor = ThreadPoolExecutor(max_workers=2)
 
 # ────────────────────────── HELPER FUNCTIONS ──────────────────────────
 def _ensure_thread(tid=None):
-    return tid or client.beta.threads.create().id
+    return tid or openai.beta.threads.create().id
 
 def _post_user(thread_id, msg):
-    client.beta.threads.messages.create(thread_id=thread_id, role="user", content=msg)
+    openai.beta.threads.messages.create(thread_id=thread_id, role="user", content=msg)
 
 def _run(thread_id, instr):
-    run = client.beta.threads.runs.create(thread_id=thread_id, assistant_id=ASSISTANT_ID, instructions=instr)
+    run = openai.beta.threads.runs.create(thread_id=thread_id, assistant_id=ASSISTANT_ID, instructions=instr)
     start = time.time()
     while run.status not in ("completed", "failed", "expired", "cancelled"):
         if time.time() - start > TIMEOUT_S:
             raise TimeoutError("Assistant run timed out.")
         time.sleep(0.35)
-        run = client.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run.id)
+        run = openai.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run.id)
     if run.status != "completed":
         raise RuntimeError(f"Run ended with status {run.status}")
 
 def _chat_history(thread_id):
-    msgs = sorted(client.beta.threads.messages.list(thread_id=thread_id).data, key=lambda m: m.created_at)
+    msgs = sorted(openai.beta.threads.messages.list(thread_id=thread_id).data, key=lambda m: m.created_at)
     history, last = [], ""
     for m in msgs:
         if m.role not in ("user", "assistant"): continue
@@ -99,12 +98,12 @@ def ask_question(question, thread_id=None):
 
     if must_refuse:
         system = PRONOUN_RULE + FORMAT_RULE
-        resp = client.chat.completions.create(
+        resp = openai.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "system", "content": system}, {"role": "user", "content": question}]
         )
         final = resp.choices[0].message.content
-        client.beta.threads.messages.create(thread_id=thread_id, role="assistant", content=final)
+        openai.beta.threads.messages.create(thread_id=thread_id, role="assistant", content=final)
         history, _ = _chat_history(thread_id)
         return {"response": final, "thread_id": thread_id, "chat_history": history}
 
