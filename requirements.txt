@@ -4,3 +4,4 @@ openai
 python-docx
 gunicorn
 python-dotenv
+langchain
