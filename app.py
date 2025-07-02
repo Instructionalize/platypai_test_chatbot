@@ -37,7 +37,7 @@ FORMAT_RULE = (
 )
 
 # ── Build / reuse LanceDB vector table ────────────────────────────────
-retrieval_emb = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+retrieval_emb = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-MiniLM-L3-v2")
 os.makedirs(DB_FOLDER, exist_ok=True)
 db = lancedb.connect(DB_FOLDER)
 
