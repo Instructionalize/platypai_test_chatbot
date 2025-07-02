@@ -13,9 +13,8 @@ import openai
 
 
 # ────────────────────────── CONFIG ──────────────────────────
-openai.api_key   = os.getenv("OPENAI_API_KEY")   # add your key in Streamlit Secrets
-# openai.project   = os.getenv("OPENAI_PROJECT_ID")  # optional for sk-proj keys
-client = openai     
+openai.api_key="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"  # optional for sk-proj keys
+client = openai.api_key   
 ASSISTANT_ID = "asst_xzJKnd6qxS7lrV2PKDXmAWz9"  # replace if needed
 
 DOCX_PATH = "Structured Content for ChatBot.docx"
