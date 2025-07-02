@@ -10,6 +10,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 # ── OPENAI & ASSISTANT IDs ───────────────────────────────────────────
 api_key = os.getenv("OPENAI_API_KEY")
+
+client        = OpenAI(api_key=api_key)
 ASSISTANT_ID  = "asst_xzJKnd6qxS7lrV2PKDXmAWz9"
 
 # ── RAG / VECTOR SETTINGS ────────────────────────────────────────────
