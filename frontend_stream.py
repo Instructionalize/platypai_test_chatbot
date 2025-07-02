@@ -86,7 +86,7 @@ with st.container():
         )
         try:
             r = requests.post(
-                "http://localhost:10000/ask",
+                "https://platypai-test-chatbot.onrender.com",
                 headers={"Content-Type": "application/json"},
                 data=json.dumps({
                     "question": pending_q,
