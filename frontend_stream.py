@@ -8,11 +8,14 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import LanceDB
 from langchain_huggingface import HuggingFaceEmbeddings
 import lancedb, docx
-from openai import OpenAI
+import openai
+
 
 
 # ────────────────────────── CONFIG ──────────────────────────
-client=OpenAI(api_key="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",project="proj-lcYRS3EJNT1v6V1PN_HDw3kf4d7RxQR2BzsnLiEgUZqSIOfzqzgs2kPRU3T3BlbkFJ5Qe59tTzA7yeBO4tnTmwHr9EQCDbanauRcU86xPQ1HuKTL0qT8ccnlaKIA")
+openai.api_key   = os.getenv("OPENAI_API_KEY")   # add your key in Streamlit Secrets
+# openai.project   = os.getenv("OPENAI_PROJECT_ID")  # optional for sk-proj keys
+client = openai     
 ASSISTANT_ID = "asst_xzJKnd6qxS7lrV2PKDXmAWz9"  # replace if needed
 
 DOCX_PATH = "Structured Content for ChatBot.docx"
