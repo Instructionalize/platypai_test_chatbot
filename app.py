@@ -9,8 +9,7 @@ import lancedb, docx, os, time, hashlib, pathlib
 from concurrent.futures import ThreadPoolExecutor
 
 # ── OPENAI & ASSISTANT IDs ───────────────────────────────────────────
-OPENAI_API_KEY = "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"
-client        = OpenAI(api_key=OPENAI_API_KEY)
+api_key = os.getenv("OPENAI_API_KEY")
 ASSISTANT_ID  = "asst_xzJKnd6qxS7lrV2PKDXmAWz9"
 
 # ── RAG / VECTOR SETTINGS ────────────────────────────────────────────
