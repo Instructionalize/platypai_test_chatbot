@@ -3,7 +3,6 @@ import os, time, json, hashlib, pathlib, textwrap
 from concurrent.futures import ThreadPoolExecutor
 
 import streamlit as st
-import openai
 from langchain.docstore.document import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import LanceDB
@@ -13,7 +12,7 @@ from openai import OpenAI
 
 
 # ────────────────────────── CONFIG ──────────────────────────
-client=OpenAI(api_key="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")
+client=OpenAI(api_key="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",project="proj-lcYRS3EJNT1v6V1PN_HDw3kf4d7RxQR2BzsnLiEgUZqSIOfzqzgs2kPRU3T3BlbkFJ5Qe59tTzA7yeBO4tnTmwHr9EQCDbanauRcU86xPQ1HuKTL0qT8ccnlaKIA")
 ASSISTANT_ID = "asst_xzJKnd6qxS7lrV2PKDXmAWz9"  # replace if needed
 
 DOCX_PATH = "Structured Content for ChatBot.docx"
