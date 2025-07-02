@@ -5,3 +5,5 @@ python-docx
 gunicorn
 python-dotenv
 langchain
+langchain-community
+lancedb
