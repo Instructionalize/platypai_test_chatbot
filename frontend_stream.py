@@ -8,12 +8,16 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import LanceDB
 from langchain_huggingface import HuggingFaceEmbeddings
 import lancedb, docx
-import openai
-
-
-
 # ────────────────────────── CONFIG ──────────────────────────
-openai.api_key = "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"
+from openai import OpenAI
+import os
+
+client = OpenAI(           # one global client
+    api_key=os.getenv("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"),
+    project=os.getenv("proj_eEuW03itNSORJrv2v7FCNrF8"),  # safe to omit if not in projects mode
+    timeout=45,
+)
+
 ASSISTANT_ID = "asst_xzJKnd6qxS7lrV2PKDXmAWz9"  # replace if needed
 
 DOCX_PATH = "Structured Content for ChatBot.docx"
@@ -60,24 +64,24 @@ executor = ThreadPoolExecutor(max_workers=2)
 
 # ────────────────────────── HELPER FUNCTIONS ──────────────────────────
 def _ensure_thread(tid=None):
-    return tid or openai.beta.threads.create().id
+    return tid or client.beta.threads.create().id
 
 def _post_user(thread_id, msg):
-    openai.beta.threads.messages.create(thread_id=thread_id, role="user", content=msg)
+    client.beta.threads.messages.create(thread_id=thread_id, role="user", content=msg)
 
 def _run(thread_id, instr):
-    run = openai.beta.threads.runs.create(thread_id=thread_id, assistant_id=ASSISTANT_ID, instructions=instr)
+    run = client.beta.threads.runs.create(thread_id=thread_id, assistant_id=ASSISTANT_ID, instructions=instr)
     start = time.time()
     while run.status not in ("completed", "failed", "expired", "cancelled"):
         if time.time() - start > TIMEOUT_S:
             raise TimeoutError("Assistant run timed out.")
         time.sleep(0.35)
-        run = openai.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run.id)
+        run = client.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run.id)
     if run.status != "completed":
         raise RuntimeError(f"Run ended with status {run.status}")
 
 def _chat_history(thread_id):
-    msgs = sorted(openai.beta.threads.messages.list(thread_id=thread_id).data, key=lambda m: m.created_at)
+    msgs = sorted(client.beta.threads.messages.list(thread_id=thread_id).data, key=lambda m: m.created_at)
     history, last = [], ""
     for m in msgs:
         if m.role not in ("user", "assistant"): continue
@@ -98,12 +102,12 @@ def ask_question(question, thread_id=None):
 
     if must_refuse:
         system = PRONOUN_RULE + FORMAT_RULE
-        resp = openai.chat.completions.create(
+        resp = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "system", "content": system}, {"role": "user", "content": question}]
         )
         final = resp.choices[0].message.content
-        openai.beta.threads.messages.create(thread_id=thread_id, role="assistant", content=final)
+        client.beta.threads.messages.create(thread_id=thread_id, role="assistant", content=final)
         history, _ = _chat_history(thread_id)
         return {"response": final, "thread_id": thread_id, "chat_history": history}
 
