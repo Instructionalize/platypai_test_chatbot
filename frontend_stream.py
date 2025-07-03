@@ -13,8 +13,8 @@ from openai import OpenAI
 import os
 
 client = OpenAI(           # one global client
-    api_key=os.getenv("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"),
-    project=os.getenv("proj_eEuW03itNSORJrv2v7FCNrF8"),  # safe to omit if not in projects mode
+    api_key=os.getenv("OPENAI_API_KEY"),
+    project=os.getenv("OPENAI_PROJECT_ID"),  # safe to omit if not in projects mode
     timeout=45,
 )
 
