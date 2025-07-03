@@ -13,7 +13,7 @@ import openai
 
 
 # ────────────────────────── CONFIG ──────────────────────────
-openai.api_key = "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"
+openai.api_key = "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"
 ASSISTANT_ID = "asst_xzJKnd6qxS7lrV2PKDXmAWz9"  # replace if needed
 
 DOCX_PATH = "Structured Content for ChatBot.docx"
